@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+.lighthouseci/
+.qa/
+.codex-scratch/
+test-results/
+/docs/assets/paper/
+*.log

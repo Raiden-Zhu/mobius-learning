@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Möbius Learning: Cyclic Depth Folding in Transformers</title>
+  <meta name="description" content="Möbius Learning outperforms fixed-order looped Transformer training at larger loop depths through cyclic depth folding.">
+  <meta name="author" content="Tongtian Zhu">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#F6F7F8">
+
+  <link rel="canonical" href="https://raiden-zhu.github.io/mobius-learning/">
+  <link rel="alternate" type="application/x-bibtex" href="https://raiden-zhu.github.io/mobius-learning/assets/citation/mobius-learning.bib">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon-180.png">
+  <link
+    rel="preload"
+    as="image"
+    href="assets/figures/web/result-validation-loss-960.webp"
+    imagesrcset="assets/figures/web/result-validation-loss-960.webp 960w, assets/figures/web/result-validation-loss-1600.webp 1600w"
+    imagesizes="(max-width: 760px) calc(100vw - 32px), 600px"
+    type="image/webp"
+    fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/site.css">
+
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="Möbius Learning">
+  <meta property="og:title" content="Möbius Learning: Cyclic Depth Folding in Transformers">
+  <meta property="og:description" content="Möbius Learning outperforms fixed-order looped Transformer training at larger loop depths through cyclic depth folding.">
+  <meta property="og:url" content="https://raiden-zhu.github.io/mobius-learning/">
+  <meta property="og:image" content="https://raiden-zhu.github.io/mobius-learning/assets/social/social-card-1200x630.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Möbius Learning: Cyclic Depth Folding in Transformers — Version 1 preliminary technical report.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Möbius Learning: Cyclic Depth Folding in Transformers">
+  <meta name="twitter:description" content="Möbius Learning outperforms fixed-order looped Transformer training at larger loop depths through cyclic depth folding.">
+  <meta name="twitter:image" content="https://raiden-zhu.github.io/mobius-learning/assets/social/social-card-1200x630.png">
+  <meta name="twitter:image:alt" content="Möbius Learning: Cyclic Depth Folding in Transformers — Version 1 preliminary technical report.">
+
+  <meta name="citation_title" content="Möbius Learning: Cyclic Depth Folding in Transformers">
+  <meta name="citation_author" content="Tongtian Zhu">
+  <meta name="citation_author_institution" content="Zhejiang University">
+  <meta name="citation_author_email" content="raiden@zju.edu.cn">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_technical_report_institution" content="Zhejiang University">
+  <meta name="citation_language" content="en">
+  <meta name="citation_fulltext_html_url" content="https://raiden-zhu.github.io/mobius-learning/">
+  <meta name="citation_keywords" content="Möbius Learning; cyclic depth folding; Transformers; looped Transformers; distributed training; depth-role superposition">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "@id": "https://raiden-zhu.github.io/mobius-learning/#article",
+    "headline": "Möbius Learning: Cyclic Depth Folding in Transformers",
+    "name": "Möbius Learning: Cyclic Depth Folding in Transformers",
+    "description": "Möbius Learning outperforms fixed-order looped Transformer training at larger loop depths through cyclic depth folding.",
+    "abstract": "Möbius Learning is a training architecture based on cyclic depth folding. Worker-indexed cyclic orders train each block group across source-relative depths, inducing depth-role superposition.",
+    "version": "Version 1 (Preliminary Technical Report)",
+    "datePublished": "2026",
+    "inLanguage": "en",
+    "isAccessibleForFree": true,
+    "url": "https://raiden-zhu.github.io/mobius-learning/",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://raiden-zhu.github.io/mobius-learning/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Tongtian Zhu",
+      "email": "raiden@zju.edu.cn",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Zhejiang University"
+      }
+    },
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://raiden-zhu.github.io/mobius-learning/assets/social/social-card-1200x630.png",
+      "width": 1200,
+      "height": 630
+    },
+    "keywords": [
+      "Möbius Learning",
+      "cyclic depth folding",
+      "Transformers",
+      "looped Transformers",
+      "distributed training",
+      "depth-role superposition"
+    ],
+    "copyrightYear": 2026,
+    "copyrightHolder": {
+      "@type": "Person",
+      "name": "Tongtian Zhu"
+    }
+  }
+  </script>
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="wordmark" href="#top" aria-label="Möbius Learning home">Möbius Learning</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#result">Result</a>
+        <a href="#method">Method</a>
+        <a href="#scope">Scope</a>
+        <a href="#citation">Citation</a>
+      </nav>
+      <!-- PUBLIC_PAPER_LINK_HEADER_START -->
+      <span class="header-report header-report--disabled" aria-disabled="true">Paper forthcoming</span>
+      <!-- PUBLIC_PAPER_LINK_HEADER_END -->
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="masthead" id="top" aria-labelledby="page-title">
+      <div class="masthead__copy">
+        <p class="eyebrow">Version 1 · Preliminary Technical Report</p>
+        <h1 id="page-title">Möbius Learning</h1>
+        <p class="subtitle">Cyclic Depth Folding in Transformers</p>
+        <p class="byline">Tongtian Zhu · Zhejiang University</p>
+
+        <div class="result-claim">
+          <p class="hero-hook"><strong>Looped Transformers</strong> repeat a fixed block order. <strong>Möbius Learning</strong> turns that order into a training axis.</p>
+        </div>
+      </div>
+
+      <div class="masthead-figures" role="region" tabindex="0" aria-label="Main result and cyclic depth folding visual; scroll horizontally on smaller screens">
+        <figure class="masthead-result">
+          <a
+            class="figure-image-link"
+            href="assets/figures/original/validation-loss.pdf"
+            data-figure-open
+            data-dialog-src="assets/figures/web/result-validation-loss-1600.webp"
+            data-dialog-original="assets/figures/original/validation-loss.pdf"
+            data-dialog-alt="Line chart of validation loss versus loop depth. Möbius Learning is higher at L 1 and 2 and lower at L 6, 10, and 15 than the fixed-order looped Transformer.">
+            <picture>
+              <source srcset="assets/figures/web/result-validation-loss-960.webp 960w, assets/figures/web/result-validation-loss-1600.webp 1600w" sizes="(max-width: 900px) calc(100vw - 64px), 490px" type="image/webp">
+              <img src="assets/figures/web/result-validation-loss-960.webp" width="1600" height="1104" fetchpriority="high" decoding="async" alt="Line chart of validation loss versus loop depth. Möbius Learning is higher at L 1 and 2 and lower at L 6, 10, and 15 than the fixed-order looped Transformer.">
+            </picture>
+          </a>
+          <figcaption><strong>Result:</strong> Lower validation loss at <em>L</em> = 6, 10, and 15 with the same 2.5B-token budget and the same number of complete passes through the Transformer block groups.</figcaption>
+        </figure>
+
+        <figure class="masthead-result">
+          <a
+            class="figure-image-link"
+            href="assets/figures/original/cyclic-depth-folding-metaphor.png"
+            data-figure-open
+            data-dialog-src="assets/figures/web/cyclic-depth-folding-metaphor-1536.webp"
+            data-dialog-original="assets/figures/original/cyclic-depth-folding-metaphor.png"
+            data-dialog-alt="Möbius-strip illustration with colored depth bands and one Transformer block group highlighted across shallow and deep positions.">
+            <picture>
+              <source srcset="assets/figures/web/cyclic-depth-folding-metaphor-768.webp 768w, assets/figures/web/cyclic-depth-folding-metaphor-1536.webp 1536w" sizes="(max-width: 900px) calc(100vw - 64px), 490px" type="image/webp">
+              <img src="assets/figures/web/cyclic-depth-folding-metaphor-768.webp" width="1536" height="1024" decoding="async" alt="Möbius-strip illustration with colored depth bands and one Transformer block group highlighted across shallow and deep positions.">
+            </picture>
+          </a>
+          <figcaption><strong>Mechanism:</strong> Cyclic depth folding trains each block group to serve both shallow and deep roles.</figcaption>
+        </figure>
+      </div>
+
+      <p class="result-headline"><span class="finding-icon" aria-hidden="true">★</span><strong class="finding-label">Major finding:</strong> <strong class="result-method">Möbius Learning</strong> <strong class="result-emphasis">outperforms</strong> <strong class="result-method result-method--baseline">fixed-order looped Transformer training</strong> at larger loop depths.</p>
+
+      <div class="actions" role="group" aria-label="Paper resources">
+        <!-- PUBLIC_PAPER_LINK_ACTION_START -->
+        <span class="button button--disabled" aria-disabled="true">Paper forthcoming</span>
+        <!-- PUBLIC_PAPER_LINK_ACTION_END -->
+        <a class="button button--secondary" href="#citation">Cite this work</a>
+      </div>
+
+      <a class="next-hint" href="#in-brief">In brief <span aria-hidden="true">↓</span></a>
+    </section>
+
+    <section class="section section--brief" id="in-brief" aria-labelledby="brief-title">
+      <div class="reading-column">
+        <p class="section-kicker">In brief</p>
+        <h2 id="brief-title">TL;DR</h2>
+        <p>A <strong class="method-name">fixed-order looped Transformer</strong> increases computational depth by reusing Transformer block groups in one fixed order. <strong class="method-name">Möbius Learning</strong> turns block order into a training axis through cyclic depth folding: cyclic shifts train every block group at shallow and deep positions, producing depth-role superposition.</p>
+        <p>In four-worker experiments with a modded GPT-2 small (124M) trained with Muon on 2.5B FineWeb tokens, <strong class="method-name">Möbius Learning</strong> outperforms the <strong class="method-name">fixed-order looped Transformer</strong> at <em>L</em> = 6, 10, and 15. Each comparison uses the same 2.5B-token budget and the same loop depth, measured by the number of complete passes through the Transformer block groups.</p>
+      </div>
+    </section>
+
+    <section class="section" id="result" aria-labelledby="result-title">
+      <div class="section-heading reading-column">
+        <p class="section-kicker">Empirical evidence</p>
+        <h2 id="result-title">Exact results</h2>
+        <p class="section-lead">Validation loss after 2.5B training tokens at each loop depth.</p>
+      </div>
+
+      <div class="table-wrap" role="region" tabindex="0" aria-label="Validation loss results; scroll horizontally if needed">
+        <table>
+          <caption>Both methods train on 2.5B FineWeb tokens. Each row fixes loop depth <em>L</em> and <em>K</em> = 4<em>L</em> block-group applications per input path.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Loop depth <em>L</em></th>
+              <th scope="col">Applications <em>K</em></th>
+              <th scope="col">Looped loss</th>
+              <th scope="col">Möbius loss</th>
+              <th scope="col">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">1</th><td>4</td><td>3.3042</td><td>3.4739</td><td class="delta delta--higher">+0.1697</td></tr>
+            <tr><th scope="row">2</th><td>8</td><td>3.2890</td><td>3.3448</td><td class="delta delta--higher">+0.0557</td></tr>
+            <tr><th scope="row">6</th><td>24</td><td>3.2564</td><td>3.2480</td><td class="delta delta--lower">−0.0084</td></tr>
+            <tr><th scope="row">10</th><td>40</td><td>3.2456</td><td>3.2397</td><td class="delta delta--lower">−0.0059</td></tr>
+            <tr><th scope="row">15</th><td>60</td><td>3.2420</td><td><strong>3.2337</strong></td><td class="delta delta--lower">−0.0083</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Δ = Möbius loss − looped loss. Negative values favor Möbius Learning.</p>
+    </section>
+
+    <section class="section" id="method" aria-labelledby="method-title">
+      <div class="section-heading reading-column">
+        <p class="section-kicker">Mechanism</p>
+        <h2 id="method-title">How cyclic depth folding works</h2>
+        <p>A <strong class="method-name">fixed-order looped Transformer</strong> repeats one fixed block-group order for every local batch. <strong class="method-name">Möbius Learning</strong> fixes the starting point by originating-worker index and applies the same block groups in a worker-indexed cyclic order.</p>
+        <p>For a batch with originating-worker index <em>s</em>, source-relative depth is measured from that path’s starting point. Across starting points, every block group occupies every within-pass source-relative depth exactly once. Each block group’s parameters are therefore optimized across shallow and deep roles: depth-role superposition.</p>
+      </div>
+
+      <figure class="paper-figure paper-figure--dense paper-figure--method">
+        <div class="figure-viewport" role="region" tabindex="0" data-scroll-focus="0.43" aria-label="Fixed-order looped Transformer and Möbius Learning comparison; scroll horizontally to inspect all panels">
+          <a
+            class="figure-image-link"
+            href="assets/figures/original/ordered-vs-mobius.png"
+            data-figure-open
+            data-dialog-src="assets/figures/web/ordered-vs-mobius-1691.webp"
+            data-dialog-original="assets/figures/original/ordered-vs-mobius.png"
+            data-dialog-alt="Comparison of the fixed-order looped Transformer block-group sequence with four worker-indexed cyclic orders in Möbius Learning.">
+            <picture>
+              <source srcset="assets/figures/web/ordered-vs-mobius-960.webp 960w, assets/figures/web/ordered-vs-mobius-1691.webp 1691w" sizes="(max-width: 900px) 900px, 1000px" type="image/webp">
+              <img src="assets/figures/web/ordered-vs-mobius-960.webp" width="1691" height="930" loading="lazy" decoding="async" alt="Comparison of the fixed-order looped Transformer block-group sequence with four worker-indexed cyclic orders in Möbius Learning.">
+            </picture>
+          </a>
+        </div>
+        <figcaption>Fixed-order looped Transformer and Möbius Learning with four block groups. The fixed-order looped Transformer repeats one fixed order for every local batch. In Möbius Learning, the path for originating-worker index <em>s</em> begins at <em>F</em><sub><em>s</em></sub> and follows a worker-indexed cyclic order. The columns are logical paths, not separate physical copies of the block groups. <a href="assets/figures/original/ordered-vs-mobius.png">Open full figure</a>.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="parallelism" aria-labelledby="parallelism-title">
+      <div class="section-heading reading-column">
+        <p class="section-kicker">Execution strategy</p>
+        <h2 id="parallelism-title">Möbius parallelism</h2>
+        <p>Möbius parallelism distributes block groups across workers and executes the worker-indexed cyclic orders induced by Möbius Learning.</p>
+      </div>
+
+      <figure class="paper-figure paper-figure--dense">
+        <div class="figure-viewport" role="region" tabindex="0" data-scroll-focus="0.67" aria-label="Parallelism comparison; scroll horizontally to inspect all panels">
+          <a
+            class="figure-image-link"
+            href="assets/figures/original/parallelism-comparison.png"
+            data-figure-open
+            data-dialog-src="assets/figures/web/parallelism-comparison-2400.webp"
+            data-dialog-original="assets/figures/original/parallelism-comparison.png"
+            data-dialog-alt="Three-panel comparison of replicated data parallelism, pipeline parallelism, and Möbius parallelism across four workers.">
+            <picture>
+              <source srcset="assets/figures/web/parallelism-comparison-1200.webp 1200w, assets/figures/web/parallelism-comparison-2400.webp 2400w" sizes="(max-width: 900px) 900px, 1000px" type="image/webp">
+              <img src="assets/figures/web/parallelism-comparison-1200.webp" width="2400" height="1238" loading="lazy" decoding="async" alt="Three-panel comparison of replicated data parallelism, pipeline parallelism, and Möbius parallelism across four workers.">
+            </picture>
+          </a>
+        </div>
+        <figcaption>Conceptual comparison of replicated data parallelism, pipeline parallelism, and Möbius parallelism. Replicated data parallelism keeps a full ordered model replica at each worker; pipeline parallelism partitions the model under a fixed stage order; Möbius parallelism assigns one block group to each worker and executes worker-indexed cyclic orders. Raw examples remain local, while hidden states and gradients cross workers. <a href="assets/figures/original/parallelism-comparison.png">Open full figure</a>.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section section--compact" id="scope" aria-labelledby="scope-title">
+      <div class="section-heading reading-column">
+        <p class="section-kicker">Experimental setting</p>
+        <h2 id="scope-title">Matched comparison</h2>
+      </div>
+      <dl class="scope-list">
+        <div><dt>Model</dt><dd>Four-worker modded GPT-2 small (124M), trained with Muon on FineWeb.</dd></div>
+        <div><dt>Token budget</dt><dd>Both methods train on the same 2.5B tokens.</dd></div>
+        <div><dt>Loop depth</dt><dd>Both methods use the same <em>L</em> complete Transformer block-sequence passes.</dd></div>
+        <div><dt>Block applications</dt><dd>Both methods execute the same <em>K</em> = 4<em>L</em> block-group applications per input path.</dd></div>
+        <div><dt>Result</dt><dd>Möbius Learning outperforms the fixed-order looped Transformer at <em>L</em> = 6, 10, and 15.</dd></div>
+      </dl>
+    </section>
+
+    <section class="section section--status section--compact" id="status" aria-labelledby="status-title">
+      <div class="reading-column">
+        <p class="section-kicker">Research status</p>
+        <h2 id="status-title">Next steps</h2>
+        <p>Next versions will extend the current four-worker, 124M-parameter, 2.5B-token study across worker counts, model scales, token budgets, systems measurements, and representation-level analyses of depth-role superposition.</p>
+      </div>
+    </section>
+
+    <section class="section section--compact" id="citation" aria-labelledby="citation-title">
+      <div class="section-heading reading-column">
+        <p class="section-kicker">Reference</p>
+        <h2 id="citation-title">Citation</h2>
+        <p>If this report is useful in your work, please cite Version 1:</p>
+      </div>
+
+      <div class="citation-tool">
+        <pre tabindex="0"><code id="bibtex-code">@misc{zhu2026mobiuslearning,
+  title  = {M{\"o}bius Learning: Cyclic Depth Folding in Transformers},
+  author = {Zhu, Tongtian},
+  year   = {2026},
+  note   = {Version 1 (Preliminary Technical Report)},
+  url    = {https://raiden-zhu.github.io/mobius-learning/}
+}</code></pre>
+        <div class="citation-actions">
+          <button class="button button--primary" type="button" id="copy-bibtex">Copy BibTeX</button>
+          <a class="button button--secondary" href="assets/citation/mobius-learning.bib" download>Download .bib</a>
+          <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Möbius Learning · Version 1 (Preliminary Technical Report)</p>
+    <p>Tongtian Zhu · Zhejiang University · <a href="mailto:raiden@zju.edu.cn">raiden@zju.edu.cn</a></p>
+    <p>© 2026 Tongtian Zhu · All rights reserved</p>
+  </footer>
+
+  <dialog class="figure-dialog" id="figure-dialog" aria-labelledby="figure-dialog-title">
+    <div class="figure-dialog__header">
+      <h2 id="figure-dialog-title">Inspect figure</h2>
+      <button class="dialog-close" type="button" id="dialog-close">Close</button>
+    </div>
+    <div class="figure-dialog__toolbar" role="group" aria-label="Figure zoom controls">
+      <button type="button" id="zoom-out">Zoom out</button>
+      <button type="button" id="zoom-reset">Reset</button>
+      <button type="button" id="zoom-in">Zoom in</button>
+    </div>
+    <div class="figure-dialog__viewport" id="dialog-viewport">
+      <img id="dialog-image" src="assets/figures/web/ordered-vs-mobius-1691.webp" width="1691" height="930" loading="lazy" decoding="async" alt="">
+    </div>
+    <div class="figure-dialog__footer">
+      <p>Pan or open the full figure to inspect labels.</p>
+      <a id="dialog-original" href="assets/figures/original/ordered-vs-mobius.png" target="_blank" rel="noopener">Open full figure</a>
+    </div>
+  </dialog>
+</body>
+</html>
