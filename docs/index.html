@@ -147,7 +147,7 @@
               <img src="assets/figures/web/result-validation-loss-960.webp" width="1600" height="1104" fetchpriority="high" decoding="async" alt="Line chart of validation loss versus loop depth. Möbius Learning is higher at L 1 and 2 and lower at L 6, 10, and 15 than the fixed-order looped Transformer.">
             </picture>
           </a>
-          <figcaption><strong>Result:</strong> Lower validation loss at <em>L</em> = 6, 10, and 15 with the same 2.5B-token budget and the same number of complete passes through the Transformer block groups.</figcaption>
+          <figcaption><strong>Result:</strong> In 2.5B-token FineWeb pretraining, Möbius Learning achieves lower validation loss at matched loop depths <em>L</em> = 6, 10, and 15.</figcaption>
         </figure>
 
         <figure class="masthead-result">
@@ -185,7 +185,7 @@
         <p class="section-kicker">In brief</p>
         <h2 id="brief-title">TL;DR</h2>
         <p>A <strong class="method-name">fixed-order looped Transformer</strong> increases computational depth by reusing Transformer block groups in one fixed order. <strong class="method-name">Möbius Learning</strong> turns block order into a training axis through cyclic depth folding: cyclic shifts train every block group at shallow and deep positions, producing depth-role superposition.</p>
-        <p>In four-worker experiments with a modded GPT-2 small (124M) trained with Muon on 2.5B FineWeb tokens, <strong class="method-name">Möbius Learning</strong> outperforms the <strong class="method-name">fixed-order looped Transformer</strong> at <em>L</em> = 6, 10, and 15. Each comparison uses the same 2.5B-token budget and the same loop depth, measured by the number of complete passes through the Transformer block groups.</p>
+        <p>In four-worker experiments with a randomly initialized modded GPT-2 small (124M) pretrained with Muon on 2.5B FineWeb tokens, <strong class="method-name">Möbius Learning</strong> outperforms the <strong class="method-name">fixed-order looped Transformer</strong> at <em>L</em> = 6, 10, and 15. Each comparison uses the same 2.5B-token budget and the same loop depth, measured by the number of complete passes through the Transformer block groups.</p>
       </div>
     </section>
 
@@ -279,7 +279,7 @@
         <h2 id="scope-title">Matched comparison</h2>
       </div>
       <dl class="scope-list">
-        <div><dt>Model</dt><dd>Four-worker modded GPT-2 small (124M), trained with Muon on FineWeb.</dd></div>
+        <div><dt>Model</dt><dd>Randomly initialized modded GPT-2 small (124M), pretrained with Muon on FineWeb in a four-worker setting.</dd></div>
         <div><dt>Token budget</dt><dd>Both methods train on the same 2.5B tokens.</dd></div>
         <div><dt>Loop depth</dt><dd>Both methods use the same <em>L</em> complete Transformer block-sequence passes.</dd></div>
         <div><dt>Block applications</dt><dd>Both methods execute the same <em>K</em> = 4<em>L</em> block-group applications per input path.</dd></div>
